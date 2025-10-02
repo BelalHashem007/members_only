@@ -44,3 +44,7 @@ select {
   color: #888;
   text-align: right;
 }
+.delete-msg{
+    color: red;
+    text-decoration: none;
+}

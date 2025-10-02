@@ -171,6 +171,17 @@ const postMessage = [
     res.redirect('/');
   },
 ];
+
+async function deleteMessage(req,res){
+  if(req.isAuthenticated() && req.user.admin){
+    const msgId = Number(req.params.id);
+    console.log("msg to be deleted: ",msgId);
+    await query.deleteMessage(msgId);
+    return res.redirect('/');
+  }
+  res.send('You are not authorized.');
+}
+
 module.exports = {
   getSignup,
   postSignup,
@@ -182,4 +193,5 @@ module.exports = {
   postSecret,
   getMessageForm,
   postMessage,
+  deleteMessage,
 };

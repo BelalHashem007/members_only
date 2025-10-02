@@ -16,6 +16,7 @@ indexRouter.post('/secret',controller.postSecret);
 //messageForm
 indexRouter.get('/message',controller.getMessageForm);
 indexRouter.post('/message',controller.postMessage);
+indexRouter.get('/delete-msg/:id',controller.deleteMessage);
 
 //home
 indexRouter.get('/',controller.getHome);

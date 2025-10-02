@@ -34,9 +34,13 @@ async function createMessage(msg) {
 
 async function getAllMessagesWithUsers() {
   const messages = await pool.query(
-    "SELECT messages.title, messages.date,messages.msg,users.firstname,users.lastname  FROM messages JOIN users ON users.id=messages.user_id ORDER BY messages.date DESC;"
+    "SELECT messages.id,messages.title, messages.date,messages.msg,users.firstname,users.lastname  FROM messages JOIN users ON users.id=messages.user_id ORDER BY messages.date DESC;"
   );
   return messages.rows;
+}
+
+async function deleteMessage(messageId) {
+  await pool.query("DELETE FROM messages WHERE id=$1", [1]);
 }
 
 module.exports = {
@@ -46,4 +50,5 @@ module.exports = {
   updateMembership,
   createMessage,
   getAllMessagesWithUsers,
+  deleteMessage,
 };

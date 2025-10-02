@@ -45,6 +45,9 @@
         <div class="msg_date">
           <%= currentUser.membership ===1 ? msg.date : "Unknown(become a secret club member to know)" %>
         </div>
+        <%if (currentUser.admin) {%>
+          <a href="/delete-msg/<%=msg.id%>" class="delete-msg">Delete</a>
+        <%}%>
       </div>
       <%})%>
     </div>
