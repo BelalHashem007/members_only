@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>Home</title>
+  </head>
+  <body>
+    <% if (!locals.isAuth) {%>
+
+    <h1>HomePage</h1>
+    <div>
+      New here ? <a href="/sign-up">Sign up!</a> or <a href="/log-in">Log in</a>
+    </div>
+    <%}else {%>
+    <h1>HomePage</h1>
+    <div>
+      Hello, <strong><%= currentUser.firstname%></strong>.
+      <a href="/log-out">Log out</a>
+    </div>
+    <% if (locals.currentUser.membership==0){%>
+    <div>You are not in the secret club.</div>
+    <div><a href="/secret">Join the secret club!</a></div>
+    <%}else {%> 
+        <div>You are in the secret club.</div>
+    <%}%>
+        <%}%>
+  </body>
+</html>
