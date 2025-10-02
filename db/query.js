@@ -32,8 +32,10 @@ async function createMessage(msg) {
   );
 }
 
-async function getAllMessages(){
-  const messages = await pool.query("SELECT * FROM messages;")
+async function getAllMessagesWithUsers() {
+  const messages = await pool.query(
+    "SELECT messages.title, messages.date,messages.msg,users.firstname,users.lastname  FROM messages JOIN users ON users.id=messages.user_id ORDER BY messages.date DESC;"
+  );
   return messages.rows;
 }
 
@@ -43,5 +45,5 @@ module.exports = {
   getUserById,
   updateMembership,
   createMessage,
-  getAllMessages
+  getAllMessagesWithUsers,
 };

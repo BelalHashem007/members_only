@@ -106,10 +106,11 @@ const postSignup = [
 async function getHome(req, res) {
   if (req.isAuthenticated()) {
     console.log(req.user);
-    const messages = await query.getAllMessages();
+    const messages = await query.getAllMessagesWithUsers();
     return res.render("index", { isAuth: true ,messages});
   }
-  return res.render("index", { isAuth: false });
+  const messages = await query.getAllMessagesWithUsers();
+  return res.render("index", { isAuth: false,messages });
 }
 
 async function getLogin(req, res) {

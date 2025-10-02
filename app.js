@@ -1,14 +1,19 @@
+//imports
 const express = require("express");
 const path = require("node:path");
-const app = express();
 const indexRouter = require("./routes/indexRouter");
 const session = require("express-session");
 const passport = require("passport");
 
 //app setups
-app.set("views", path.join(__dirname, "views"));
+const app = express();
+PORT = 3000;
+app.set("views", path.join(__dirname, "views"));//setting the views file and the engine
 app.set("view engine", "ejs");
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));//allows us to read body from forms
+const assetsPath = path.join(__dirname,"public");
+app.use(express.static(assetsPath))
+//auth
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -24,11 +29,12 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+//allowing access for user info in the ejs templates
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     next();
   });
-PORT = 3000;
 
 //routes
 app.use("/", indexRouter);

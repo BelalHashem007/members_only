@@ -1,6 +1,7 @@
 <html>
   <head>
     <title>Home</title>
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <% if (!locals.isAuth) {%>
@@ -9,7 +10,16 @@
     <div>
       New here ? <a href="/sign-up">Sign up!</a> or <a href="/log-in">Log in</a>
     </div>
-
+    <div class="messages">
+      <% messages.map((msg)=> {%>
+      <div class="message">
+        <div class="msg_user">Unknown(become a secret club member to know)</div>
+        <div class="msg_title"><%=msg.title%></div>
+        <div class="msg_content"><%=msg.msg%></div>
+        <div class="msg_date">Unknown(become a secret club member to know)</div>
+      </div>
+      <%})%>
+    </div>
     <%}else {%>
 
     <h1>HomePage</h1>
@@ -24,12 +34,20 @@
     <div>You are in the secret club.</div>
     <%}%>
     <div><a href="/message">Add Message</a></div>
-    <% messages.map((msg)=> {%>
-    <div class="message">
-      <div class="msg_title"><%=msg.title%></div>
-      <div class="msg_content"><%=msg.msg%></div>
-      <div class="msg_date"><%= msg.date%></div>
+    <div class="messages">
+      <% messages.map((msg)=> {%>
+      <div class="message">
+        <div class="msg_user">
+          <%=currentUser.membership ===1 ? msg.firstname+" "+msg.lastname : "Unknown(become a secret club member to know)" %>
+        </div>
+        <div class="msg_title"><%=msg.title%></div>
+        <div class="msg_content"><%=msg.msg%></div>
+        <div class="msg_date">
+          <%= currentUser.membership ===1 ? msg.date : "Unknown(become a secret club member to know)" %>
+        </div>
+      </div>
+      <%})%>
     </div>
-    <%})%> <%}%>
+    <%}%>
   </body>
 </html>
