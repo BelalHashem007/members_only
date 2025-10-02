@@ -72,6 +72,16 @@ const validateUser = [
     })
     .withMessage("Password confirmation is not the same as Password."),
 ];
+const validateMessage = [
+  body("title")
+    .trim()
+    .isLength({ min: 5, max: 80 })
+    .withMessage("Title must be between 5 and 80 characters"),
+  body("content")
+    .trim()
+    .isLength({ min: 50, max: 5000 })
+    .withMessage("Message content must be between 50 and 5000 characters"),
+];
 //----------------
 async function getSignup(req, res) {
   res.render("sign-up", { title: "Sign-up" });
@@ -83,7 +93,7 @@ const postSignup = [
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       console.log(errors);
-      res.send({ errors: errors.array() });
+      return res.send({ errors: errors.array() });
     }
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const user = { ...req.body };
@@ -96,7 +106,8 @@ const postSignup = [
 async function getHome(req, res) {
   if (req.isAuthenticated()) {
     console.log(req.user);
-    return res.render("index", { isAuth: true });
+    const messages = await query.getAllMessages();
+    return res.render("index", { isAuth: true ,messages});
   }
   return res.render("index", { isAuth: false });
 }
@@ -123,15 +134,42 @@ async function getSecret(req, res) {
   res.render("secretForm");
 }
 
-async function postSecret(req,res) {
-    if (req.body.secretPass == "Belal123"){
-        await query.updateMembership(1,req.user.id);
-        console.log(req.user)
-        res.redirect('/');
-    }
-    else res.send(`Wrong password! <a href="/">Home</a>`)
+async function postSecret(req, res) {
+  if (req.body.secretPass == "Belal123") {
+    await query.updateMembership(1, req.user.id);
+    console.log(req.user);
+    res.redirect("/");
+  } else res.send(`Wrong password! <a href="/">Home</a>`);
 }
 
+async function getMessageForm(req, res) {
+  if (req.isAuthenticated()) {
+    res.render("messageForm");
+  } else
+    res.send(`You must be logged in to post a message. <a href="/">Home</a>`);
+}
+
+const postMessage = [
+  validateMessage,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log(errors);
+      return res.send({ errors: errors.array() });
+    }
+    const message = req.body;
+    message.userid = req.user.id;
+    const now = new Date();
+    const shortFormatter = new Intl.DateTimeFormat("en-GB", {
+      dateStyle: "short",
+      timeStyle: "short",
+    });
+    message.date= shortFormatter.format(now);
+    console.log(message)
+    await query.createMessage(message);
+    res.redirect('/');
+  },
+];
 module.exports = {
   getSignup,
   postSignup,
@@ -141,4 +179,6 @@ module.exports = {
   getLogout,
   getSecret,
   postSecret,
+  getMessageForm,
+  postMessage,
 };

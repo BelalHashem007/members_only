@@ -9,7 +9,9 @@
     <div>
       New here ? <a href="/sign-up">Sign up!</a> or <a href="/log-in">Log in</a>
     </div>
+
     <%}else {%>
+
     <h1>HomePage</h1>
     <div>
       Hello, <strong><%= currentUser.firstname%></strong>.
@@ -18,9 +20,16 @@
     <% if (locals.currentUser.membership==0){%>
     <div>You are not in the secret club.</div>
     <div><a href="/secret">Join the secret club!</a></div>
-    <%}else {%> 
-        <div>You are in the secret club.</div>
+    <%}else {%>
+    <div>You are in the secret club.</div>
     <%}%>
-        <%}%>
+    <div><a href="/message">Add Message</a></div>
+    <% messages.map((msg)=> {%>
+    <div class="message">
+      <div class="msg_title"><%=msg.title%></div>
+      <div class="msg_content"><%=msg.msg%></div>
+      <div class="msg_date"><%= msg.date%></div>
+    </div>
+    <%})%> <%}%>
   </body>
 </html>

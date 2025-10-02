@@ -8,16 +8,40 @@ async function createUser(user) {
 }
 
 async function getUser(username) {
-  const result = await pool.query("SELECT * FROM users WHERE username=$1", [username]);
+  const result = await pool.query("SELECT * FROM users WHERE username=$1", [
+    username,
+  ]);
   return result.rows[0];
 }
 async function getUserById(userid) {
-    const result = await pool.query("SELECT * FROM users WHERE id=$1", [userid]);
-    return result.rows[0];
+  const result = await pool.query("SELECT * FROM users WHERE id=$1", [userid]);
+  return result.rows[0];
 }
 
-async function updateMembership(num,userid){
-    await pool.query('UPDATE users SET membership= $1 WHERE id=$2',[num,userid])
+async function updateMembership(num, userid) {
+  await pool.query("UPDATE users SET membership= $1 WHERE id=$2", [
+    num,
+    userid,
+  ]);
 }
 
-module.exports = { createUser ,getUser,getUserById,updateMembership};
+async function createMessage(msg) {
+  await pool.query(
+    "INSERT INTO messages(user_id, title, msg, date) VALUES ($1,$2,$3,$4)",
+    [msg.userid, msg.title, msg.content, msg.date]
+  );
+}
+
+async function getAllMessages(){
+  const messages = await pool.query("SELECT * FROM messages;")
+  return messages.rows;
+}
+
+module.exports = {
+  createUser,
+  getUser,
+  getUserById,
+  updateMembership,
+  createMessage,
+  getAllMessages
+};
