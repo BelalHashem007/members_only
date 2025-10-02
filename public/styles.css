@@ -48,3 +48,11 @@ select {
     color: red;
     text-decoration: none;
 }
+form div {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+}
+form button {
+    margin-top: 10px;
+}

@@ -39,6 +39,15 @@ app.use((req, res, next) => {
 //routes
 app.use("/", indexRouter);
 
+//handling errors
+app.use((req,res)=>{
+  res.status(404).send("Page not found.")
+});
+app.use((err,req,res,next)=>{
+  console.error(err);
+  res.status(500).send(err);
+});
+
 //server listen
 app.listen(PORT, (err) => {
   if (err) throw err;
